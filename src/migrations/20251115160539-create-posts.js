@@ -1,30 +1,31 @@
-"use strict";
+'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
   const { DataTypes } = Sequelize;
-
-  await queryInterface.createTable("users", {
+  await queryInterface.createTable("posts", {
     id: {
       type: DataTypes.BIGINT.UNSIGNED,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
-    first_name: {
-      type: DataTypes.STRING(100),
+    user_id: {
+      type: DataTypes.BIGINT.UNSIGNED,
       allowNull: false,
+      references: {
+        model: "users",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
-    last_name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-    email: {
+    title: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      unique: true,
     },
-    password: {
-      type: DataTypes.STRING(255),
+    content: {
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     created_at: {
@@ -40,8 +41,8 @@ export async function up(queryInterface, Sequelize) {
       ),
     },
   });
-
+ 
 }
-export async function down(queryInterface) {
-  await queryInterface.dropTable("users");
+export async function down(queryInterface, Sequelize) {
+  await queryInterface.dropTable("posts");
 }
